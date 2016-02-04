@@ -19,7 +19,7 @@
 
 Name:           python-dockerfile-parse
 Version:        0.0.5
-Release:        3%{?dist}
+Release:        4%{?dist}
 
 Summary:        Python library for Dockerfile manipulation
 Group:          Development/Tools
@@ -118,6 +118,9 @@ LANG=en_US.utf8 py.test-%{python2_version} -vv tests
 %endif # with_python3
 
 %changelog
+* Thu Feb 04 2016 Fedora Release Engineering <releng@fedoraproject.org> - 0.0.5-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
 * Tue Nov 10 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.0.5-3
 - Rebuilt for https://fedoraproject.org/wiki/Changes/python3.5
 
