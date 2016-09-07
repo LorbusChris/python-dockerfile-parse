@@ -1,123 +1,108 @@
-%if 0%{?rhel} && 0%{?rhel} <= 6
-%{!?__python2: %global __python2 /usr/bin/python2}
-%{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
-%{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
+%if 0%{?rhel} && 0%{?rhel} <= 7
+%bcond_with python3
+%if 0%{?rhel} <= 6
 %{!?python2_version: %global python2_version %(%{__python2} -c "import sys; sys.stdout.write(sys.version[:3])")}
+%{!?_licensedir:%global license %%doc}
+%endif
+%else
+%bcond_without python3
 %endif
 
-%if (0%{?fedora} >= 21 || 0%{?rhel} >= 8)
-%global with_python3 1
-%endif
+%bcond_without tests
 
-%global with_check 1
+%global srcname dockerfile-parse
+%global modname %(n=%{srcname}; echo ${n//-/_})
 
-%global owner DBuildService
-%global project dockerfile-parse
-
-%global commit 36af022e527b0ac74bd27d7c2962207c0fd41632
-%global shortcommit %(c=%{commit}; echo ${c:0:7})
-
-Name:           python-dockerfile-parse
+Name:           python-%{srcname}
 Version:        0.0.5
-Release:        5%{?dist}
+Release:        6%{?dist}
 
 Summary:        Python library for Dockerfile manipulation
-Group:          Development/Tools
 License:        BSD
-URL:            https://github.com/%{owner}/%{project}
-Source0:        https://github.com/%{owner}/%{project}/archive/%{commit}/%{project}-%{commit}.tar.gz
+URL:            https://github.com/DBuildService/dockerfile-parse
+Source0:        %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
 
 BuildArch:      noarch
 
+%description
+%{summary}.
+
+%package -n python2-%{srcname}
+Summary:        %{summary}
+%{?python_provide:%python_provide python2-%{srcname}}
 BuildRequires:  python2-devel
+%if 0%{?rhel} && 0%{?rhel} <= 7
 BuildRequires:  python-setuptools
-%if 0%{?with_check}
 BuildRequires:  pytest
-%endif # with_check
+%else
+BuildRequires:  python2-setuptools
+BuildRequires:  python2-pytest
+%endif
 
-Requires:       python-setuptools
+%description -n python2-%{srcname}
+%{summary}.
 
-%if 0%{?with_python3}
+Python 2 version.
+
+%if %{with python3}
+%package -n python3-%{srcname}
+Summary:        %{summary}
+%{?python_provide:%python_provide python3-%{srcname}}
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
-%if 0%{?with_check}
+%if %{with tests}
 BuildRequires:  python3-pytest
-%endif # with_check
-%endif # with_python3
+%endif
 
+%description -n python3-%{srcname}
+%{summary}.
 
-%description
-Python library for Dockerfile manipulation
-
-%if 0%{?with_python3}
-%package -n python3-%{project}
-Summary:        Python 3 library for Dockerfile manipulation
-Group:          Development/Tools
-License:        BSD
-Requires:       python3-setuptools
-
-%description -n python3-%{project}
-Python 3 library for Dockerfile manipulation
-%endif # with_python3
+Python 3 version.
+%endif
 
 %prep
-%setup -qn %{project}-%{commit}
-%if 0%{?with_python3}
-rm -rf %{py3dir}
-cp -a . %{py3dir}
-find %{py3dir} -name '*.py' | xargs sed -i '1s|^#!python|#!%{__python3}|'
-%endif # with_python3
-
+%autosetup -n %{srcname}-%{version}
 
 %build
-# build python package
-%{__python} setup.py build
-%if 0%{?with_python3}
-pushd %{py3dir}
-%{__python3} setup.py build
-popd
-%endif # with_python3
-
+%py2_build
+%if %{with python3}
+%py3_build
+%endif
 
 %install
-%if 0%{?with_python3}
-pushd %{py3dir}
-%{__python3} setup.py install --skip-build --root %{buildroot}
-popd
-%endif # with_python3
+%py2_install
+%if %{with python3}
+%py3_install
+%endif
 
-%{__python} setup.py install --skip-build --root %{buildroot}
-
-%if 0%{?with_check}
+%if %{with tests}
 %check
-%if 0%{?with_python3}
-LANG=en_US.utf8 py.test-%{python3_version} -vv tests
-%endif # with_python3
+export LANG=C.UTF-8
+py.test-%{python2_version} -v tests
+%if %{with python3}
+py.test-%{python3_version} -v tests
+%endif
+%endif
 
-LANG=en_US.utf8 py.test-%{python2_version} -vv tests
-%endif # with_check
-
-%files
-%doc README.md
-%{!?_licensedir:%global license %%doc}
+%files -n python2-%{srcname}
 %license LICENSE
-%dir %{python2_sitelib}/dockerfile_parse
-%{python2_sitelib}/dockerfile_parse/*.*
-%{python2_sitelib}/dockerfile_parse-%{version}-py2.*.egg-info
-
-%if 0%{?with_python3}
-%files -n python3-%{project}
 %doc README.md
-%{!?_licensedir:%global license %%doc}
+%{python2_sitelib}/%{modname}-*.egg-info/
+%{python2_sitelib}/%{modname}/
+
+%if %{with python3}
+%files -n python3-%{srcname}
 %license LICENSE
-%dir %{python3_sitelib}/dockerfile_parse
-%dir %{python3_sitelib}/dockerfile_parse/__pycache__
-%{python3_sitelib}/dockerfile_parse/*.*
-%{python3_sitelib}/dockerfile_parse/__pycache__/*.py*
-%{python3_sitelib}/dockerfile_parse-%{version}-py3.*.egg-info
-%endif # with_python3
+%doc README.md
+%{python3_sitelib}/%{modname}-*.egg-info/
+%{python3_sitelib}/%{modname}/
+%endif
 
 %changelog
+* Wed Sep 07 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 0.0.5-6
+- Modernize spec
+- Trivial fixes
+
 * Tue Jul 19 2016 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.0.5-5
 - https://fedoraproject.org/wiki/Changes/Automatic_Provides_for_Python_RPM_Packages
 
