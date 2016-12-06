@@ -15,12 +15,19 @@
 
 Name:           python-%{srcname}
 Version:        0.0.5
-Release:        6%{?dist}
+Release:        7%{?dist}
 
 Summary:        Python library for Dockerfile manipulation
 License:        BSD
 URL:            https://github.com/DBuildService/dockerfile-parse
 Source0:        %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
+
+# Patch to handle inheriting ENV vars from parent Dockerfiles
+#
+# Upstream PRs (merged into single patch here):
+#   https://github.com/DBuildService/dockerfile-parse/pull/21
+#   https://github.com/DBuildService/dockerfile-parse/pull/22
+Patch0:         dockerfile-parse-0.0.5-parent_env.patch
 
 BuildArch:      noarch
 
@@ -61,7 +68,9 @@ Python 3 version.
 %endif
 
 %prep
-%autosetup -n %{srcname}-%{version}
+%setup -n %{srcname}-%{version}
+
+%patch0 -p1
 
 %build
 %py2_build
@@ -99,6 +108,9 @@ py.test-%{python3_version} -v tests
 %endif
 
 %changelog
+* Tue Dec 06 2016 Adam Miller <maxamillion@fedoraproject.org> - 0.0.5-7
+- Patch to handle inheriting parent Dockerfile ENVs
+
 * Wed Sep 07 2016 Igor Gnatenko <i.gnatenko.brain@gmail.com> - 0.0.5-6
 - Modernize spec
 - Trivial fixes
