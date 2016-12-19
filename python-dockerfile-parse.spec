@@ -15,7 +15,7 @@
 
 Name:           python-%{srcname}
 Version:        0.0.5
-Release:        7%{?dist}
+Release:        8%{?dist}
 
 Summary:        Python library for Dockerfile manipulation
 License:        BSD
@@ -108,6 +108,9 @@ py.test-%{python3_version} -v tests
 %endif
 
 %changelog
+* Mon Dec 19 2016 Miro Hrončok <mhroncok@redhat.com> - 0.0.5-8
+- Rebuild for Python 3.6
+
 * Tue Dec 06 2016 Adam Miller <maxamillion@fedoraproject.org> - 0.0.5-7
 - Patch to handle inheriting parent Dockerfile ENVs
 
