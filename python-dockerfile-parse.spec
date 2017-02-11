@@ -15,7 +15,7 @@
 
 Name:           python-%{srcname}
 Version:        0.0.5
-Release:        8%{?dist}
+Release:        9%{?dist}
 
 Summary:        Python library for Dockerfile manipulation
 License:        BSD
@@ -108,6 +108,9 @@ py.test-%{python3_version} -v tests
 %endif
 
 %changelog
+* Sat Feb 11 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.0.5-9
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_26_Mass_Rebuild
+
 * Mon Dec 19 2016 Miro Hrončok <mhroncok@redhat.com> - 0.0.5-8
 - Rebuild for Python 3.6
 
