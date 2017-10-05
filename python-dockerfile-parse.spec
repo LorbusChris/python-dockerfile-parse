@@ -37,6 +37,7 @@ BuildRequires:  pytest
 %else
 BuildRequires:  python2-setuptools
 BuildRequires:  python2-pytest
+BuildRequires:  python2-six
 %endif
 
 %description -n python2-%{srcname}
@@ -52,6 +53,7 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 %if %{with tests}
 BuildRequires:  python3-pytest
+BuildRequires:  python3-six
 %endif
 
 %description -n python3-%{srcname}
