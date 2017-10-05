@@ -14,20 +14,13 @@
 %global modname %(n=%{srcname}; echo ${n//-/_})
 
 Name:           python-%{srcname}
-Version:        0.0.5
-Release:        10%{?dist}
+Version:        0.0.7
+Release:        1%{?dist}
 
 Summary:        Python library for Dockerfile manipulation
 License:        BSD
 URL:            https://github.com/DBuildService/dockerfile-parse
 Source0:        %{url}/archive/%{version}/%{srcname}-%{version}.tar.gz
-
-# Patch to handle inheriting ENV vars from parent Dockerfiles
-#
-# Upstream PRs (merged into single patch here):
-#   https://github.com/DBuildService/dockerfile-parse/pull/21
-#   https://github.com/DBuildService/dockerfile-parse/pull/22
-Patch0:         dockerfile-parse-0.0.5-parent_env.patch
 
 BuildArch:      noarch
 
@@ -70,7 +63,6 @@ Python 3 version.
 %prep
 %setup -n %{srcname}-%{version}
 
-%patch0 -p1
 
 %build
 %py2_build
@@ -108,6 +100,9 @@ py.test-%{python3_version} -v tests
 %endif
 
 %changelog
+* Thu Oct 05 2017 Tomas Tomecek <ttomecek@redhat.com> - 0.0.7-1
+- new upstream release: 0.0.7
+
 * Thu Jul 27 2017 Fedora Release Engineering <releng@fedoraproject.org> - 0.0.5-10
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_27_Mass_Rebuild
 
