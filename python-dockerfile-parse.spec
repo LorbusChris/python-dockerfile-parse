@@ -14,8 +14,8 @@
 %global modname %(n=%{srcname}; echo ${n//-/_})
 
 Name:           python-%{srcname}
-Version:        0.0.7
-Release:        2%{?dist}
+Version:        0.0.10
+Release:        1%{?dist}
 
 Summary:        Python library for Dockerfile manipulation
 License:        BSD
@@ -102,6 +102,9 @@ py.test-%{python3_version} -v tests
 %endif
 
 %changelog
+* Thu Apr 19 2018 Tomas Tomecek <ttomecek@redhat.com> - 0.0.10-1
+- New upstream release 0.0.10
+
 * Fri Feb 09 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.0.7-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_28_Mass_Rebuild
 
