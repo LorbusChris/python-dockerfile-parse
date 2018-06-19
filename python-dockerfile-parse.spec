@@ -15,7 +15,7 @@
 
 Name:           python-%{srcname}
 Version:        0.0.10
-Release:        1%{?dist}
+Release:        2%{?dist}
 
 Summary:        Python library for Dockerfile manipulation
 License:        BSD
@@ -102,6 +102,9 @@ py.test-%{python3_version} -v tests
 %endif
 
 %changelog
+* Tue Jun 19 2018 Miro Hrončok <mhroncok@redhat.com> - 0.0.10-2
+- Rebuilt for Python 3.7
+
 * Thu Apr 19 2018 Tomas Tomecek <ttomecek@redhat.com> - 0.0.10-1
 - New upstream release 0.0.10
 
