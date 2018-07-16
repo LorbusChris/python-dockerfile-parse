@@ -15,7 +15,7 @@
 
 Name:           python-%{srcname}
 Version:        0.0.11
-Release:        2%{?dist}
+Release:        3%{?dist}
 
 Summary:        Python library for Dockerfile manipulation
 License:        BSD
@@ -39,6 +39,7 @@ BuildRequires:  python2-setuptools
 BuildRequires:  python2-pytest
 BuildRequires:  python2-six
 %endif
+Requires:  python2-six
 
 %description -n python2-%{srcname}
 %{summary}.
@@ -55,6 +56,7 @@ BuildRequires:  python3-setuptools
 BuildRequires:  python3-pytest
 BuildRequires:  python3-six
 %endif
+Requires:  python3-six
 
 %description -n python3-%{srcname}
 %{summary}.
@@ -102,6 +104,9 @@ py.test-%{python3_version} -v tests
 %endif
 
 %changelog
+* Mon Jul 16 2018 Tim Waugh <twaugh@redhat.com> - 0.0.11-3
+- Require six
+
 * Sat Jul 14 2018 Fedora Release Engineering <releng@fedoraproject.org> - 0.0.11-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_29_Mass_Rebuild
 
