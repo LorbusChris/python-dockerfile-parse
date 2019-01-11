@@ -14,8 +14,8 @@
 %global modname %(n=%{srcname}; echo ${n//-/_})
 
 Name:           python-%{srcname}
-Version:        0.0.11
-Release:        3%{?dist}
+Version:        0.0.13
+Release:        1%{?dist}
 
 Summary:        Python library for Dockerfile manipulation
 License:        BSD
